@@ -166,14 +166,14 @@ code {
 }
 
 .hero {
-  padding: 4.5rem 0 1rem;
+  padding: 2rem 0 0.25rem;
 }
 
 .eyebrow {
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  color: var(--muted);
-  margin: 0 0 1.1rem;
+  margin: 0.7rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
 }
 
 .deck {
@@ -241,7 +241,7 @@ code {
 }
 
 .section {
-  padding: 4.25rem 0 0;
+  padding: 2.25rem 0 0;
 }
 
 .section > p.intro {
@@ -250,13 +250,13 @@ code {
 }
 
 .case {
-  padding: 2.75rem 0 0.5rem;
+  padding: 1.35rem 0 0.25rem;
   border-top: 1px solid var(--line);
-  margin-top: 2.5rem;
+  margin-top: 1.35rem;
 }
 
 .case:first-of-type {
-  margin-top: 1.75rem;
+  margin-top: 1rem;
 }
 
 .kicker {
@@ -513,6 +513,54 @@ figcaption {
   color: var(--accent);
 }
 
+.also {
+  margin: 1.75rem 0 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--ink);
+  max-width: none;
+}
+
+.kicker a.plain-url,
+.ship-list a {
+  overflow-wrap: anywhere;
+}
+
+.kicker a.plain-url {
+  flex-basis: 100%;
+}
+
+.ship-list p {
+  overflow-wrap: anywhere;
+}
+
+.points {
+  list-style: none;
+  margin: 1.35rem 0 0;
+  padding: 0;
+}
+
+.points li {
+  max-width: 68ch;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.points li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.points b {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 .ship p {
   margin: 0.35rem 0 0;
 }
@@ -582,7 +630,7 @@ figcaption {
 }
 
 .site-footer {
-  margin-top: 4.5rem;
+  margin-top: 2.5rem;
   border-top: 1px solid var(--line);
 }
 
@@ -678,7 +726,7 @@ figcaption {
   }
 
   .hero {
-    padding-top: 2.75rem;
+    padding-top: 1.5rem;
   }
 }
 
