@@ -48,8 +48,9 @@
     <div class="wrap bar">
       <a class="brand" href="#top">Zaid Hasan</a>
       <nav aria-label="Page">
-        <a href="#work">Work</a>
-        <a href="#shipped">Also shipped</a>
+        <a href="#experience">Experience</a>
+        <a href="#oss">Open source</a>
+        <a href="#projects">Projects</a>
         <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -58,86 +59,134 @@
 
   <main id="main">
     <header class="hero wrap" id="top">
-      <p class="eyebrow">Backend engineer · SDE 1 at Suki AI · Bengaluru</p>
       <h1>Zaid Hasan</h1>
+      <p class="eyebrow">Backend engineer · SDE 1 at Suki AI · Bengaluru</p>
       <p class="deck">I build services where two writers can hit the same row, a message can arrive twice, and a state machine has to refuse an illegal step. At Suki AI that is production Go and gRPC for an ambient clinical platform.</p>
       <p class="deck">I started out validating distributed systems and now I build them. Before I wrote a production service I had already spent a year and a half load-testing one across three regions, and writing integration suites against its Redis and MySQL layers.</p>
+      <p class="deck">I am open to SDE 1 and other backend engineering roles.</p>
       <ul class="roles">
-        <li>Suki AI · SDET intern, Feb 2025 – Jul 2025</li>
-        <li>SDE 1, Jul 2025 – present</li>
-        <li>Open to backend roles</li>
+        <li>Suki AI · SDE 1, Jul 2025 – present</li>
+        <li>SDE 1 intern, Feb 2025 – Jul 2025</li>
       </ul>
-      <ol class="toc">
-        <li>
-          <a href="#feedback">
-            <span class="num">01</span>
-            <span class="toc-title">Feedback that can be submitted once</span>
-            <span class="toc-meta">Production · Go · gRPC · MySQL</span>
-          </a>
-        </li>
-        <li>
-          <a href="#inventory">
-            <span class="num">02</span>
-            <span class="toc-title">Stock that cannot be sold twice</span>
-            <span class="toc-meta">Java · PostgreSQL · RabbitMQ</span>
-          </a>
-        </li>
-        <li>
-          <a href="#gcs">
-            <span class="num">03</span>
-            <span class="toc-title">A claim only one worker can win</span>
-            <span class="toc-meta">Open source · Python · GCS</span>
-          </a>
-        </li>
-        <li>
-          <a href="#redis">
-            <span class="num">04</span>
-            <span class="toc-title">A limit that holds at the boundary</span>
-            <span class="toc-meta">Open source · Redis · Lua</span>
-          </a>
-        </li>
-      </ol>
     </header>
 
-    <section class="section wrap" id="work" aria-labelledby="work-title">
-      <h2 id="work-title">Selected work</h2>
-      <p class="intro">Four decisions. The first is in production. The other three are public, and they are the same kind of problem.</p>
+    <section class="section wrap ship" id="experience" aria-labelledby="experience-title">
+      <h2 id="experience-title">Experience</h2>
+      <p class="kicker"><span>Suki AI</span> Bengaluru · ambient AI for clinicians</p>
+      <p class="meta-line">SDE 1 · Jul 2025 – present</p>
+      <p class="meta-line">SDE 1 intern · Feb 2025 – Jul 2025</p>
+      <ul class="ship-list">
+        <li>
+          <h3>Feedback service · owned end to end</h3>
+          <p>The single platform service that stores clinician feedback on AI-generated notes, summaries, QnA responses, and medical forms. Two gRPC endpoints over MySQL. Organization and user come from platform metadata, and a submit-once rule keeps a submitted record immutable. A repeat returns <code>AlreadyExists</code>. Shipped with unit tests and service-level gRPC integration tests.</p>
+        </li>
+        <li>
+          <h3>Appointments service · co-developed</h3>
+          <p>System of record for clinical appointments. Visit CRUD, schedule queries by provider and date range, note and composition attachments on encounters, and Pub/Sub notifications on every appointment change. Go, gRPC, MySQL, with unit tests and service-level gRPC integration tests.</p>
+        </li>
+        <li>
+          <h3>Load, then the cluster that shipped</h3>
+          <p>Distributed load simulations across 3 GCP VM clusters. K6 at 600 concurrent users per VM, plus 200 concurrent users coordinated in parallel across all three regions. The p90 and p95 analysis was accepted, and that configuration shipped as Suki’s production US-West cluster. I also moved Suki Developer Platform API benchmarking onto K6, which set the high-concurrency baselines used as SLOs for the public endpoints.</p>
+        </li>
+        <li>
+          <h3>Interoperability and Form Filling</h3>
+          <p>Full regression coverage for the Interoperability initiative, aligning SDP APIs with the Web SDK and the iOS SDK, and for Form Filling, an ambient feature integrated with partner APIs. That coverage is what unblocked both launches.</p>
+        </li>
+        <li>
+          <h3>Redis integration suites</h3>
+          <p>Integration suites for internal RPC services talk to Redis with production-identical key patterns and check state transitions across microservice boundaries.</p>
+        </li>
+      </ul>
+    </section>
 
-      <article class="case" id="feedback">
-        <p class="kicker"><span>01</span> ms-feedback · owned end to end · Suki AI</p>
-        <h3>Feedback that can be submitted once</h3>
-        <p class="lede">The single platform service that stores clinician feedback on AI-generated notes, summaries, QnA responses, and medical forms. Two gRPC endpoints over MySQL.</p>
+    <section class="section wrap" id="oss" aria-labelledby="oss-title">
+      <h2 id="oss-title">Open source</h2>
+      <p class="intro">Merged pull requests in other people’s repositories. The first two are the ones with a real concurrency decision in them.</p>
+
+      <article class="case" id="gcs">
+        <p class="kicker"><span>01</span> halcyon-past/quarantine #64 · merged · Python <a class="plain-url" href="https://github.com/halcyon-past/quarantine/pull/64">https://github.com/halcyon-past/quarantine/pull/64</a></p>
+        <h3>A GCS store for failed jobs</h3>
+        <p class="lede">quarantine is a Python library for a loop over many items. You mark the function with <code>@quarantine</code>. If one item throws, the library saves that item and the full error, and the rest of the loop keeps running. Afterwards <code>quarantine retry</code> runs only the saved failures. By default those failures sit in a local <code>.quarantine/</code> folder, so each machine has its own copy. I added a Google Cloud Storage backend so every worker writes into one bucket, using a path like <code>gs://bucket/prefix</code>.</p>
         <figure class="diagram">
-          <figcaption>Identity comes from the platform. The row does not get a second write.</figcaption>
-          <div class="flow">
-            <div class="node"><b>Clients</b><span>Web, iOS, partners</span></div>
-            <span class="join" aria-hidden="true">→</span>
-            <div class="node node-accent"><b>ms-feedback</b><span>Submit · Get</span></div>
-            <span class="join" aria-hidden="true">→</span>
-            <div class="node"><b>MySQL</b><span>Immutable once submitted</span></div>
+          <figcaption>Compare-and-swap with a generation precondition. GCS has no If-None-Match: *.</figcaption>
+          <div class="race">
+            <div class="node"><b>Worker A</b><span>Wants record n</span></div>
+            <div class="node"><b>Worker B</b><span>Wants record n</span></div>
+            <div class="node node-accent claim"><b>n.claim</b><span>if_generation_match = 0 · write only if nothing is there</span></div>
+            <p class="node"><b>Winner</b><span>Creates the object. The precondition now fails for everyone else.</span></p>
+            <p class="node"><b>Loser</b><span>PreconditionFailed, HTTP 412. Takes n+1.</span></p>
           </div>
         </figure>
         <div class="triad">
           <div>
             <h3>Constraint</h3>
-            <p>Analytics has to trust the dataset. A second submission for the same item would rewrite history. Organization and user cannot come from the request body, or a caller can attribute feedback to someone else.</p>
+            <p>Two workers must never take the same record number. S3 can refuse a write that would overwrite, with <code>If-None-Match: *</code>. GCS has no equivalent header. Deleting an object on GCS raises <code>NotFound</code> where S3 does not, so routine cleanup races. A reader must not observe a half-written record.</p>
           </div>
           <div class="is-decision">
             <h3>Decision</h3>
-            <p>Multi-tenant identity is taken from platform metadata. A submit-once rule makes the row immutable, and a repeat returns <code>AlreadyExists</code>. Shipped with unit tests and service-level gRPC integration tests.</p>
+            <p>A zero-byte <code>.claim</code> object with <code>if_generation_match=0</code>, which means write only if no live generation exists. The loser gets 412 and takes the next number. <code>meta.json</code> is uploaded last, and readers ignore a prefix that does not have it. Cleanup treats <code>NotFound</code> as a benign race. CI runs against fake-gcs-server, with a 90% coverage gate on macOS, Windows, and Linux.</p>
           </div>
           <div>
             <h3>What fails otherwise</h3>
-            <p>Every product surface invents its own feedback table, or the service believes whatever organization id the client sends.</p>
+            <p>Both workers stamp the same id, or a retried delete fails the job, or a reader picks up a record that is only half there.</p>
           </div>
         </div>
-        <p class="source">In production at Suki. The repository is internal.</p>
       </article>
 
+      <article class="case" id="redis">
+        <p class="kicker"><span>02</span> GDGBabcockUniversity #55 · merged · FastAPI <a class="plain-url" href="https://github.com/GDGBabcockUniversity/gdg-babcock-hacktoberfest-2026/pull/55">https://github.com/GDGBabcockUniversity/gdg-babcock-hacktoberfest-2026/pull/55</a></p>
+        <h3>A sliding-window log at 100 requests per second</h3>
+        <p class="lede">Login, register, and the LLM grading endpoints of an exam platform needed a limit that still holds when two windows meet. A fixed counter allows a double burst at that boundary. This one is a sliding-window log.</p>
+        <figure class="diagram">
+          <figcaption>One Lua script. Separate round trips would let two requests both read 99.</figcaption>
+          <ol class="steps">
+            <li><span><b>Evict</b> every sorted-set entry older than the window. The score is Redis server time (<code>TIME</code>), so pods share one clock.</span></li>
+            <li><span><b>Count</b> what remains. A fixed window would still allow a double burst where two windows meet.</span></li>
+            <li><span><b>Add or refuse.</b> Under the limit, record this request. Otherwise HTTP 429. <code>PEXPIRE</code> drops the key when it goes idle.</span></li>
+          </ol>
+        </figure>
+        <div class="triad">
+          <div>
+            <h3>Constraint</h3>
+            <p>Count, check, and increment have to be one atomic step, or two requests both read 99 and both pass. Pod clocks drift, so the timestamp cannot come from the application. Login and register have no user yet. The grading routes do, and one route must not spend another route’s budget.</p>
+          </div>
+          <div class="is-decision">
+            <h3>Decision</h3>
+            <p>A Redis sorted set, one member per request, score equal to Redis <code>TIME</code>. The whole sequence runs in one Lua script. Login and register are keyed by client IP. Grade and override are keyed by user id plus the endpoint. That user id is read from the JWT by a FastAPI dependency the app already had. Eight integration tests, run locally, in the backend container, and in CI with <code>redis:7-alpine</code>.</p>
+          </div>
+          <div>
+            <h3>What fails otherwise</h3>
+            <p>The limit of 100 becomes 101 under concurrency, or 200 in a few milliseconds at the window boundary. A key with no TTL never resets. That second bug is the earlier fix in scamshield-api #80.</p>
+          </div>
+        </div>
+      </article>
+
+      <div class="ship">
+        <p class="also">Also merged</p>
+        <ul class="ship-list">
+          <li>
+            <p>scamshield-api #80 — rate-limit keys were created with no expiry, so the window never reset and Redis kept a key for every IP. <a href="https://github.com/ashrafee-dev/scamshield-api/pull/80">https://github.com/ashrafee-dev/scamshield-api/pull/80</a></p>
+          </li>
+          <li>
+            <p>scamshield-api #79 — <code>GET /health</code> on the FastAPI entry point. <a href="https://github.com/ashrafee-dev/scamshield-api/pull/79">https://github.com/ashrafee-dev/scamshield-api/pull/79</a></p>
+          </li>
+          <li>
+            <p>gdg-babcock #37 — a health endpoint for the exam-platform API. <a href="https://github.com/GDGBabcockUniversity/gdg-babcock-hacktoberfest-2026/pull/37">https://github.com/GDGBabcockUniversity/gdg-babcock-hacktoberfest-2026/pull/37</a></p>
+          </li>
+          <li>
+            <p>gdg-babcock #41 — GitHub Actions CI, the frontend moved to ESLint v9 flat config, and the Python test dependency fixed. <a href="https://github.com/GDGBabcockUniversity/gdg-babcock-hacktoberfest-2026/pull/41">https://github.com/GDGBabcockUniversity/gdg-babcock-hacktoberfest-2026/pull/41</a></p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section wrap" id="projects" aria-labelledby="projects-title">
+      <h2 id="projects-title">Projects</h2>
+      <p class="intro">Two messaging topologies. Inventory addresses each event to one handler. Order tracking broadcasts one event to every consumer.</p>
+
       <article class="case" id="inventory">
-        <p class="kicker"><span>02</span> Inventory reservation · personal project</p>
+        <p class="kicker"><span>01</span> Inventory reservation · personal project <a class="plain-url" href="https://github.com/Zaid0408/Inventory-reservation-Analytics">https://github.com/Zaid0408/Inventory-reservation-Analytics</a></p>
         <h3>Stock that cannot be sold twice</h3>
-        <p class="lede">Two services. Several orders can hit one product at the same moment, and an order that is never confirmed has to give the stock back.</p>
         <figure class="diagram">
           <figcaption>Row lock on the hot product. Expiry is a delay queue, not a cron.</figcaption>
           <div class="flow">
@@ -164,122 +213,69 @@
             <span>EXPIRED</span>
           </div>
         </figure>
-        <div class="triad">
-          <div>
-            <h3>Constraint</h3>
-            <p>A popular product is contended enough that optimistic version checks would thrash, and the critical section is short enough that holding the row is cheap. RabbitMQ is at-least-once, so a redelivery must not reserve twice. Expiry has to happen without Redis or cron.</p>
-          </div>
-          <div class="is-decision">
-            <h3>Decision</h3>
-            <p>Pessimistic lock on the product row. Separate available and reserved counters. Confirm-after-expire and double-cancel fail instead of moving the numbers. When the TTL fires, the message dead-letters into a queue that releases the stock. A unique constraint on <code>order_id</code> makes the redelivery a no-op. Six durable queues across three exchanges; anything still failing after three retries with exponential backoff goes to a dead-letter exchange.</p>
-          </div>
-          <div>
-            <h3>What fails otherwise</h3>
-            <p>Two orders both read the same available count and both commit. A redelivered message reserves the unit again. An expired reservation can still be confirmed, and the counters drift.</p>
-          </div>
-        </div>
-        <p class="source"><a href="https://github.com/Zaid0408/Inventory-reservation-Analytics" rel="me noopener noreferrer" target="_blank">Inventory-reservation-Analytics<span class="sr-only"> (opens in a new tab)</span></a></p>
+        <ul class="points">
+          <li>
+            <b>What it is</b>
+            Two services, order and inventory. Several orders can hit one product at the same time, and an order that nobody confirms has to give the stock back.
+          </li>
+          <li>
+            <b>How it solves it</b>
+            <code>POST /orders</code>, <code>POST /orders/{orderId}/confirm</code>, and <code>POST /orders/{orderId}/cancel</code>. Direct exchanges, with a queue per event: <code>order.created.queue</code>, <code>order.confirmed.queue</code>, <code>order.cancelled.queue</code>, <code>reservation.ttl.queue</code> (no consumer), <code>reservation.expired.queue</code>, and <code>dead.letter.queue</code>. The inventory consumer locks the product row with <code>SELECT … FOR UPDATE</code>.
+          </li>
+          <li>
+            <b>Execution flow</b>
+            <code>POST /orders</code> saves the order and publishes to <code>order.exchange</code> with routing key <code>order.created</code>. That message lands on <code>order.created.queue</code>. Inventory locks the row, moves stock from available to reserved, and publishes onto <code>reservation.ttl.queue</code>. When the TTL expires, RabbitMQ dead-letters the message onto <code>reservation.expired.queue</code>, and that consumer releases the stock. Confirm and cancel take the same path through <code>order.confirmed</code> and <code>order.cancelled</code>.
+          </li>
+          <li>
+            <b>Tech stack</b>
+            Java, Spring Boot, RabbitMQ, Spring Data JPA, PostgreSQL, Docker Compose.
+          </li>
+          <li>
+            <b>Misc</b>
+            A reservation only moves <code>RESERVED → CONFIRMED</code>, <code>CANCELLED</code>, or <code>EXPIRED</code>. Available and reserved are separate counters. A unique constraint on <code>order_id</code> stops a redelivered message from reserving twice. After 3 listener retries with exponential backoff, the message goes to the dead-letter queue. Six durable queues across three exchanges.
+          </li>
+        </ul>
       </article>
 
-      <article class="case" id="gcs">
-        <p class="kicker"><span>03</span> halcyon-past/quarantine #64 · merged</p>
-        <h3>A claim only one worker can win</h3>
-        <p class="lede"><a href="https://github.com/halcyon-past/quarantine" rel="noopener noreferrer" target="_blank">quarantine<span class="sr-only"> (opens in a new tab)</span></a> sets a bad record aside so a loop of 10,000 can finish. I added a Google Cloud Storage backend so a fleet of workers can share one quarantine instead of each writing to its own disk.</p>
+      <article class="case" id="orders">
+        <p class="kicker"><span>02</span> Order tracking · Java · Spring Boot · RabbitMQ <a class="plain-url" href="https://github.com/Zaid0408/OrderTrackingAnalytics">https://github.com/Zaid0408/OrderTrackingAnalytics</a></p>
+        <h3>One event, three consumers, none of them coupled</h3>
         <figure class="diagram">
-          <figcaption>Compare-and-swap with a generation precondition. GCS has no If-None-Match: *.</figcaption>
-          <div class="race">
-            <div class="node"><b>Worker A</b><span>Wants record n</span></div>
-            <div class="node"><b>Worker B</b><span>Wants record n</span></div>
-            <div class="node node-accent claim"><b>n.claim</b><span>if_generation_match = 0 · write only if nothing is there</span></div>
-            <p class="node"><b>Winner</b><span>Creates the object. The precondition now fails for everyone else.</span></p>
-            <p class="node"><b>Loser</b><span>PreconditionFailed, HTTP 412. Takes n+1.</span></p>
+          <figcaption>Fanout. The HTTP call returns 201 before any consumer runs.</figcaption>
+          <div class="flow">
+            <div class="node"><b>POST /api/orders</b><span>Accept, then publish</span></div>
+            <span class="join" aria-hidden="true">→</span>
+            <div class="node node-accent"><b>Fanout exchange</b><span>Routing key ignored</span></div>
+          </div>
+          <div class="flow">
+            <div class="node"><b>Email queue</b><span>Log EMAIL, then count</span></div>
+            <div class="node"><b>SMS queue</b><span>Log SMS, then count</span></div>
+            <div class="node node-accent"><b>Analytics queue</b><span>Push /topic/metrics</span></div>
           </div>
         </figure>
-        <div class="triad">
-          <div>
-            <h3>Constraint</h3>
-            <p>Two workers must never take the same record number. Deleting an object on GCS raises <code>NotFound</code> where S3 does not, so routine cleanup races. A reader must not observe a half-written record.</p>
-          </div>
-          <div class="is-decision">
-            <h3>Decision</h3>
-            <p>A zero-byte <code>.claim</code> object with <code>if_generation_match=0</code>. The loser of the race takes the next number. Cleanup treats <code>NotFound</code> as a benign race. A commit protocol hides the record until the write is finished. CI runs against fake-gcs-server, with a 90% coverage gate on macOS, Windows, and Linux.</p>
-          </div>
-          <div>
-            <h3>What fails otherwise</h3>
-            <p>Both workers stamp the same id, or a retried delete fails the job, or a reader picks up a record that is only half there.</p>
-          </div>
-        </div>
-        <p class="aside">Same race as the inventory oversell, opposite tool. The product row is hot and the lock is short, so that service waits on the row. A claim id is almost never contended, so a generation precondition is the whole mechanism.</p>
-        <p class="source"><a href="https://github.com/halcyon-past/quarantine/pull/64" rel="noopener noreferrer" target="_blank">Pull request #64<span class="sr-only"> (opens in a new tab)</span></a></p>
+        <ul class="points">
+          <li>
+            <b>What it is</b>
+            One Spring Boot app. Placing an order should send an email, send an SMS, and update a live count. If email fails, SMS and the dashboard still run.
+          </li>
+          <li>
+            <b>How it solves it</b>
+            <code>POST /api/orders</code> accepts the order. <code>GET /api/metrics</code> returns the counts. One fanout exchange, <code>fanout.exchange</code>, bound to <code>queue.fanout.email</code>, <code>queue.fanout.sms</code>, and <code>queue.fanout.analytics</code>. No routing keys. The dashboard subscribes to STOMP <code>/topic/metrics</code> on <code>/ws</code>.
+          </li>
+          <li>
+            <b>Execution flow</b>
+            <code>POST /api/orders</code> returns 201 and publishes to <code>fanout.exchange</code>. RabbitMQ copies that message onto the three queues. <code>EmailNotificationConsumer</code> writes an EMAIL log and increments the email count. <code>SmsNotificationConsumer</code> does the same for SMS. <code>AnalyticsConsumer</code> increments the event count and pushes the metrics to <code>/topic/metrics</code>.
+          </li>
+          <li>
+            <b>Tech stack</b>
+            Java, Spring Boot, RabbitMQ, WebSocket (STOMP), Spring Data JPA, H2, Lombok.
+          </li>
+          <li>
+            <b>Misc</b>
+            The counters are <code>AtomicLong</code>, because the three consumers increment at the same time. Notification logs are EMAIL or SMS, with status SENT or FAILED. These queues have no dead-letter setup. Inventory is the project where retries and a dead-letter queue are wired. H2 is the database in this repo, so it runs without a separate database.
+          </li>
+        </ul>
       </article>
-
-      <article class="case" id="redis">
-        <p class="kicker"><span>04</span> GDGBabcockUniversity #55 · merged · FastAPI</p>
-        <h3>A limit that holds at the boundary</h3>
-        <p class="lede">A distributed sliding window at 100 requests per second, in front of authentication and the LLM grading endpoints of an exam platform.</p>
-        <figure class="diagram">
-          <figcaption>One Lua script. Separate round trips would let two requests both read 99.</figcaption>
-          <ol class="steps">
-            <li><span><b>Evict</b> every sorted-set entry older than the window. The timestamp is Redis server time, so pods share one clock.</span></li>
-            <li><span><b>Count</b> what remains. A fixed window would still allow a double burst where two windows meet.</span></li>
-            <li><span><b>Add or refuse.</b> Under the limit, record this request. Otherwise HTTP 429. <code>PEXPIRE</code> drops the key when it goes idle.</span></li>
-          </ol>
-        </figure>
-        <div class="triad">
-          <div>
-            <h3>Constraint</h3>
-            <p>The check and the increment have to be one atomic step. Application clocks disagree across pods. Auth and grading are different keys: client IP, and authenticated user id.</p>
-          </div>
-          <div class="is-decision">
-            <h3>Decision</h3>
-            <p>A Redis sorted set, one entry per request, score equal to the server timestamp. The count, the check, and the increment run inside a Lua script on the server. Idle keys expire themselves. Eight integration tests, run locally, in the backend container, and in CI with a <code>redis:7-alpine</code> service.</p>
-          </div>
-          <div>
-            <h3>What fails otherwise</h3>
-            <p>Two concurrent requests both observe 99 and both pass, and the limit of 100 becomes 101. A key with no TTL never resets its window. That second bug is the follow-up in <a href="https://github.com/ashrafee-dev/scamshield-api/pull/80" rel="noopener noreferrer" target="_blank">scamshield-api #80<span class="sr-only"> (opens in a new tab)</span></a>.</p>
-          </div>
-        </div>
-        <p class="source"><a href="https://github.com/GDGBabcockUniversity/gdg-babcock-hacktoberfest-2026/pull/55" rel="noopener noreferrer" target="_blank">Pull request #55<span class="sr-only"> (opens in a new tab)</span></a></p>
-      </article>
-    </section>
-
-    <section class="section wrap ship" id="shipped" aria-labelledby="shipped-title">
-      <h2 id="shipped-title">Also shipped</h2>
-      <p class="intro">Shorter entries. The public repositories are linked. Suki work stays at the level I can describe here.</p>
-      <ul class="ship-list">
-        <li>
-          <h3>ms-appointments · co-developed · production</h3>
-          <p>System of record for clinical appointments. Visit CRUD, schedule queries by provider and date range, note and composition attachments on encounters, and Pub/Sub notifications on every appointment change. Go, gRPC, MySQL, with unit tests and service-level gRPC integration tests.</p>
-        </li>
-        <li>
-          <h3>Load, then the cluster that shipped</h3>
-          <p>Distributed load simulations across 3 GCP VM clusters. K6 at 600 concurrent users per VM, plus 200 concurrent users coordinated in parallel across all three regions. The p90 and p95 analysis went to engineering leadership, was accepted, and that configuration shipped as Suki’s production US-West cluster.</p>
-          <p>I also moved Suki Developer Platform API benchmarking onto K6, which set the high-concurrency baselines used as SLOs for the public endpoints.</p>
-        </li>
-        <li>
-          <h3>Interoperability and Form Filling</h3>
-          <p>Full regression coverage for the Interoperability initiative, aligning SDP APIs with the Web SDK and the iOS SDK, and for Form Filling, an ambient feature integrated with partner APIs. That coverage is what unblocked both launches. Integration suites for internal RPC services talk to Redis with production-identical key patterns and check state transitions across service boundaries.</p>
-        </li>
-        <li>
-          <h3><a href="https://github.com/Zaid0408/OrderTrackingAnalytics" rel="noopener noreferrer" target="_blank">Order tracking<span class="sr-only"> (opens in a new tab)</span></a></h3>
-          <p>The fanout counterpart to the inventory project’s direct exchanges. One order event is copied to email, SMS, and analytics, each with its own consumer, so a failure in email leaves the other two alone. The analytics consumer pushes counts over STOMP. Counters are <code>AtomicLong</code>, and every notification is written to an audit trail.</p>
-          <p class="meta-line">Java · Spring Boot · RabbitMQ · WebSocket</p>
-        </li>
-        <li>
-          <h3>Smaller merged pull requests</h3>
-          <p><a href="https://github.com/ashrafee-dev/scamshield-api/pull/80" rel="noopener noreferrer" target="_blank">scamshield-api #80<span class="sr-only"> (opens in a new tab)</span></a> — a Redis rate limiter was creating keys with no expiry, so the window never reset and memory leaked.</p>
-          <p><a href="https://github.com/ashrafee-dev/scamshield-api/pull/79" rel="noopener noreferrer" target="_blank">scamshield-api #79<span class="sr-only"> (opens in a new tab)</span></a> — <code>GET /health</code> on the FastAPI entry point.</p>
-          <p><a href="https://github.com/GDGBabcockUniversity/gdg-babcock-hacktoberfest-2026/pull/41" rel="noopener noreferrer" target="_blank">gdg-babcock #41<span class="sr-only"> (opens in a new tab)</span></a> — GitHub Actions CI, ESLint v9 flat config, and the Python test dependency.</p>
-        </li>
-        <li>
-          <h3><a href="https://github.com/Zaid0408/task-manager-app" rel="noopener noreferrer" target="_blank">Task manager<span class="sr-only"> (opens in a new tab)</span></a></h3>
-          <p>FastAPI, JWT on every endpoint, PostgreSQL via SQLAlchemy, the stack in Docker on a bridge network. Useful as a service boundary exercise. The concurrency work above is the part to read.</p>
-        </li>
-        <li>
-          <h3>Notes and practice</h3>
-          <p><a href="https://github.com/Zaid0408/LLD-Notes" rel="noopener noreferrer" target="_blank">LLD-Notes<span class="sr-only"> (opens in a new tab)</span></a> — SOLID and the common patterns, each with a Java example. <a href="https://github.com/Zaid0408/Java-DSA-Practice" rel="noopener noreferrer" target="_blank">Java-DSA-Practice<span class="sr-only"> (opens in a new tab)</span></a> — structures and algorithms by topic. <a href="https://leetcode.com/u/zaidhasan07/" rel="me noopener noreferrer" target="_blank">LeetCode<span class="sr-only"> (opens in a new tab)</span></a> — 280+ problems, strongest in arrays, dynamic programming, trees, and graph traversal.</p>
-        </li>
-      </ul>
     </section>
 
     <section class="section wrap" id="skills" aria-labelledby="skills-title">
